@@ -20,11 +20,23 @@ export class UserController {
     const { name, email, password } = req.body
 
     if (!name) {
-      return reply.send(`you did not send information about "name" on request`)
+      return reply.code(400).send({
+        statusCode: 400,
+        error: 'Bad Request',
+        menssager: `you did not send information about 'name' on request`
+      })
     } else if (!email) {
-      return reply.send(`You did not send information about "email" on request`)
+      return reply.code(400).send({
+        statusCode: 400,
+        error: 'Bad Request',
+        menssager: `You did not send information about 'email' on request`
+      })
     } else if (!password) {
-      return reply.send(`You did not send information about "password" on request`)
+      return reply.code(400).send({
+        statusCode: 400,
+        error: 'Bad Request',
+        menssager: `You did not send information about 'password' on request`
+      })
     }
 
     const user: User = { 
