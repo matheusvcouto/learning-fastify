@@ -7,12 +7,13 @@ interface User {
   password: string
 }
 
+// procurar tipagem para estender a classe com os metodos do fastify
 
 export class UserController {
 
   list(req: FastifyRequest, reply:FastifyReply) {
     const { method } = req
-    return reply.send({ method, menssager: `List user` })
+    return reply.send({ method, menssager: `List users` })
   }
 
   create(req: FastifyRequest<{Body: User}>, reply: FastifyReply) {
@@ -47,7 +48,7 @@ export class UserController {
 
     const { method } = req
 
-    reply.send({
+    reply.code(201).send({
       method,
       user,
     })
