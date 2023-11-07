@@ -1,22 +1,24 @@
-import { myMiddleware } from "../middleware/middleware"
+
 import { routes } from "../routes/routes"
 import { UserController } from '../controllers/UserController'
-import onErrorHook from "../middleware/onErrorHook"
-
+import { myMiddleware } from "../middleware/middleware"
 import fastify from "fastify"
+import onErrorHook from "../hooks/onErrorHook"
 
 const app = fastify()
 
 onErrorHook(app)
 
+app.addHook('onRequest', async (req, reply) => myMiddleware(req, reply))
+
 app.get('/', (req, reply) => {
   return reply.send({ messager: 'Hello word' })
 })
 
-app.register(routes)
+app.register(routes)  
 
 // Adiciononando Middleware global
-app.addHook('onRequest', async (req, reply) => myMiddleware(req, reply))
+
 
 const userController = new UserController()
 

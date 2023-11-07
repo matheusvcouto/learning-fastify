@@ -1,19 +1,19 @@
+import { database } from "../database/db"
 import  AppError  from "../utils/serverError"
 import { FastifyReply, FastifyRequest } from "fastify"
+import { User } from "../types/users"
 
-interface User {
-  name: string
-  email: string
-  password: string
-}
+
+const db = new database()
+
 
 // procurar tipagem para estender a classe com os metodos do fastify
 
 export class UserController {
 
   list(req: FastifyRequest, reply:FastifyReply) {
-    const { method } = req
-    return reply.send({ method, menssager: `List users` })
+    const users = db.select('users')
+    return users
   }
 
   create(req: FastifyRequest<{Body: User}>, reply: FastifyReply) {
@@ -23,17 +23,9 @@ export class UserController {
     if (!name) {
       throw new AppError('Nome é obrigatório', 401)
     } else if (!email) {
-      return reply.code(400).send({
-        statusCode: 400,
-        error: 'Bad Request',
-        menssager: `You did not send information about 'email' on request`
-      })
+      throw new AppError('email é obrigatório', 401)
     } else if (!password) {
-      return reply.code(400).send({
-        statusCode: 400,
-        error: 'Bad Request',
-        menssager: `You did not send information about 'password' on request`
-      })
+      throw new AppError('password é obrigatório', 401)
     }
 
     const user: User = { 
@@ -41,6 +33,8 @@ export class UserController {
       email, 
       password, 
     }
+
+    db.insert('users', user)
 
     const { method } = req
 

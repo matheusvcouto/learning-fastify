@@ -7,11 +7,12 @@ export default function onErrorHook(app: FastifyInstance): void {
     (request, reply, error, done) => {
 
       if (error instanceof AppError) {
-        reply.status(error.statusCode).send({ error: error.message })
+        return reply.status(error.statusCode).send({ error: error.message })
       }
 
       console.log('ERROR no servidor: ', error)
-      reply.send(error)
+
+      return reply.send(error)
       
     }
   )
