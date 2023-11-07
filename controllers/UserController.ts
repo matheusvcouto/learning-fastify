@@ -1,4 +1,4 @@
-
+import  AppError  from "../utils/serverError"
 import { FastifyReply, FastifyRequest } from "fastify"
 
 interface User {
@@ -21,11 +21,7 @@ export class UserController {
     const { name, email, password } = req.body
 
     if (!name) {
-      return reply.code(400).send({
-        statusCode: 400,
-        error: 'Bad Request',
-        menssager: `you did not send information about 'name' on request`
-      })
+      throw new AppError('Nome é obrigatório', 401)
     } else if (!email) {
       return reply.code(400).send({
         statusCode: 400,

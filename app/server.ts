@@ -1,12 +1,13 @@
-
-
 import { myMiddleware } from "../middleware/middleware"
 import { routes } from "../routes/routes"
 import { UserController } from '../controllers/UserController'
+import onErrorHook from "../middleware/onErrorHook"
 
 import fastify from "fastify"
 
 const app = fastify()
+
+onErrorHook(app)
 
 app.get('/', (req, reply) => {
   return reply.send({ messager: 'Hello word' })
