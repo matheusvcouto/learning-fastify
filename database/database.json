@@ -1,22 +1,10 @@
 {
   "users": [
     {
-      "id": "ff708f88-f245-4eb7-a2b2-2ad6f8967c10",
-      "name": "Matheus",
-      "email": "Matheus",
-      "password": "Matheus"
-    },
-    {
-      "id": "5cf276ec-5bc9-4ac8-9b6f-c4a71d9e78fc",
-      "name": "Matheus",
-      "email": "Matheus",
-      "password": "Matheus"
-    },
-    {
-      "id": "51898959-97cd-455a-a84f-17d2e59c44e8",
-      "name": "Mirella",
-      "email": "Vieira",
-      "password": "Couto"
+      "id": "b798ff94-c7aa-4ff0-a9d3-2bb0a41c47b7",
+      "name": "dasdas",
+      "email": "sdsads",
+      "password": "dasdsd"
     }
   ]
 }

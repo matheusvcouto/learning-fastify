@@ -13,8 +13,10 @@ const dataBasePath = path.resolve('./', './database/database.json') // caminho d
 
 
 export class Database {
-  private database: { [key: string]: User[] | Record[] } = {
+  private database: { [key: string]: User[] | Record[] } = {}
 
+  private persist() {
+    fs.writeFile(dataBasePath, JSON.stringify(this.database, null, 2))
   }
 
   constructor() { // Sempre que iniciar o servidor ele vai ler o arquivo
@@ -23,11 +25,7 @@ export class Database {
     }).catch(() => { // caso não exista vai criar o arquivo mesmo assim
       this.persist() 
     })
-  }
-
-  private persist() {
-    fs.writeFile(dataBasePath, JSON.stringify(this.database, null, 2))
-  }
+  } 
 
   select(table:string) {
     const data = this.database[table] ?? []
@@ -62,6 +60,15 @@ export class Database {
     this.persist()
 
     return data
+  }
+
+  delete(table: string, id: string) {
+    const rowIndex = this.database[table].findIndex(row => row.id === id)
+
+    if (rowIndex > -1) { // retorna -1 se não encontoru e se tiver encontrado sera maior que -1 // se tiver encontrado
+      this.database[table].splice(rowIndex, 1)
+      this.persist()
+    }
   }
 
 }

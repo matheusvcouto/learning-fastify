@@ -5,7 +5,7 @@ import { User } from "../types/users"
 import { randomUUID } from "crypto"
 
 
-const db = new Database()
+const database = new Database()
 
 
 // procurar tipagem para estender a classe com os metodos do fastify
@@ -13,7 +13,7 @@ const db = new Database()
 export class UserController {
 
   list() {
-    const users = db.select('users')
+    const users = database.select('users')
     return users
   }
 
@@ -36,7 +36,7 @@ export class UserController {
       password, 
     }
 
-    db.insert('users', user)
+    database.insert('users', user)
 
     const { method } = req
 
@@ -45,5 +45,15 @@ export class UserController {
       user,
     })
 
+  }
+
+  delete(req: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) {
+
+    const { id } = req.params
+
+    database.delete('users', id)
+    
+    return reply.code(204).send('usuario apagado')
+    
   }
 }
