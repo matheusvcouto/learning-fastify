@@ -3,6 +3,7 @@ import  AppError  from "../utils/serverError"
 import { FastifyReply, FastifyRequest } from "fastify"
 import { User } from "../types/users"
 import { randomUUID } from "crypto"
+import { queryParams } from "../routes/query-params"
 
 
 const database = new Database()
@@ -12,8 +13,13 @@ const database = new Database()
 
 export class UserController {
 
-  list() {
-    const users = database.select('users')
+  list(req: FastifyRequest<{ Querystring: {search?: string}}>) {
+
+    const { search } = req.query
+
+    const wasSearch = search ? { name: search, email: search, } : null
+
+    const users = database.select('users', wasSearch)
     return users
   }
 
@@ -47,6 +53,25 @@ export class UserController {
 
   }
 
+  update(req: FastifyRequest<{ Params: { id: string }, Body: User}>, reply: FastifyReply) {
+
+    const { id } = req.params
+
+    const { name, email, password } = req.body
+
+    const updateUser = {
+      id,
+      name, 
+      email, 
+      password,
+    }
+
+    database.update('users', updateUser)
+
+    return reply.code(200).send(updateUser)
+  }
+
+
   delete(req: FastifyRequest<{ Params: { id: string }}>, reply: FastifyReply) {
 
     const { id } = req.params
@@ -54,6 +79,6 @@ export class UserController {
     database.delete('users', id)
     
     return reply.code(204).send('usuario apagado')
-    
+
   }
 }

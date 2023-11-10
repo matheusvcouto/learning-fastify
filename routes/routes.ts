@@ -1,8 +1,9 @@
 import { routerParams } from "../routes/router-params"
 import { queryParams } from "../routes/query-params"
-import { FastifyInstance } from "fastify"
+import { FastifyInstance, FastifyRequest } from "fastify"
 import { specificMiddleware } from "../middleware/specificMiddleware"
 import { routeThree } from "./routeThree"
+import { User } from "../types/users"
 
 export async function routes(app: FastifyInstance) {
 
@@ -33,9 +34,9 @@ export async function routes(app: FastifyInstance) {
   })
 
   app.route({
-    method: ['GET', 'POST'],
+    method: 'POST',
     url: '/three',
-    handler: async (req, reply) => routeThree(req, reply)
+    handler: async (req: FastifyRequest<{ Body: User }>, reply) => routeThree(req, reply)
   });
 }
 

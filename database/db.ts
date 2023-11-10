@@ -27,8 +27,19 @@ export class Database {
     })
   } 
 
-  select(table:string) {
-    const data = this.database[table] ?? []
+  select(table:string, search?: { name: string, email: string} | null) {
+    let data = this.database[table] ?? []
+
+    // data = { name: matheus, email: Matheus, ...}
+    // [ ['name', 'Matheus'], ['email', 'matheus'] ]
+
+    if (search) {
+      data = data.filter( row => { // Object.entries
+        return Object.entries(search).some(([key, value]) => { // = converter em arry | some([ ['name', 'Matheus'], ['email', 'matheus'] ]) percorre no arrey
+          return row[key].toLowerCase().includes(value.toLowerCase())
+        }) 
+      })
+    } 
 
     return data
   }
@@ -36,18 +47,6 @@ export class Database {
   showDatabase() {
     return this.database
   }
-  /*
-  exemple 
-    {
-    "users": [
-      {
-        "name": "dasdasdsd",
-        "email": "sddasasdasa",
-        "password": "madsdasdasddsada"
-      }
-    ]
-  }
-  */
 
   insert(table:string, data: User) {
     if (Array.isArray(this.database[table])) { // se ja existe a tabela 
@@ -60,6 +59,16 @@ export class Database {
     this.persist()
 
     return data
+  }
+
+  update(table: string, data: User) {
+    const { id } = data
+    const rowIndex = this.database[table].findIndex(row => row.id === id)
+
+    if (rowIndex > -1) { // retorna -1 se não encontoru e se tiver encontrado sera maior que -1 // se tiver encontrado
+      this.database[table][rowIndex] = data // colocar o rowIndex para não substituir toda a tabela do banco de dados
+      this.persist()
+    }
   }
 
   delete(table: string, id: string) {

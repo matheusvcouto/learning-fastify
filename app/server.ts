@@ -24,6 +24,7 @@ const userController = new UserController()
 
 app.get('/users', userController.list)
 app.post('/users', userController.create)
+app.put('/users/:id', userController.update)
 app.delete('/users/:id', userController.delete)
 
 // https://fastify.dev/docs/latest/Reference/Server/#printroutes
